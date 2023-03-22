@@ -1,0 +1,3 @@
+D:/Task C/binaryTreeTSU/cmake-build-debug/CMakeFiles/binaryTreeTSU.dir
+D:/Task C/binaryTreeTSU/cmake-build-debug/CMakeFiles/edit_cache.dir
+D:/Task C/binaryTreeTSU/cmake-build-debug/CMakeFiles/rebuild_cache.dir
