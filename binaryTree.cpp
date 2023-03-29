@@ -57,6 +57,7 @@ void BinTree::printTreeVert(Node* p, int left_border, int right_border, int y) c
     int x = (left_border + right_border) / 2;
     HANDLE hstOut = GetStdHandle(STD_OUTPUT_HANDLE);
     COORD curpos = {(SHORT) x, (SHORT) y};
+    SetConsoleCursorPosition(hstOut, curpos);
     cout << p -> key;
     printTreeVert(p -> left, left_border, x, y + 2);
     printTreeVert(p -> right, x, right_border, y + 2);
@@ -67,9 +68,9 @@ void BinTree::add(int k, Node *p) {
 
     std::random_device rd;
     std::mt19937 mt(rd());
-    std::uniform_int_distribution<int> dist(1, 1000);
+    std::uniform_int_distribution<int> dist(1, 10);
 
-    int t = dist(mt) % 2;
+    int t = dist(mt);
     if(t == 1){
         if(p -> right) add(k, p -> right);
         else {
@@ -87,25 +88,25 @@ void BinTree::add(int k, Node *p) {
     }
 }
 
- void BinTree::treeTraversalLCR(Node* p, vector<int> &a, int &n) const{
+void BinTree::treeTraversalLCR(Node* p, vector<int> &a, int &n) const{
     if(p -> left != nullptr) treeTraversalLCR(p -> left, a, ++n);
     a.emplace_back(p -> getKey());
     if(p -> right != nullptr) treeTraversalLCR(p -> right, a, ++n);
- }
+}
 
- void BinTree::treeTraversalCLR(Node* p, vector<int> &a, int &n) const{
+void BinTree::treeTraversalCLR(Node* p, vector<int> &a, int &n) const{
     a.emplace_back(p -> getKey());
     if(p -> left != nullptr) treeTraversalCLR(p -> left, a, ++n);
     if(p -> right != nullptr) treeTraversalCLR(p -> right, a, ++n);
- }
+}
 
- void BinTree::treeTraversalRCL(Node* p, vector<int> &a, int &n) const{
+void BinTree::treeTraversalRCL(Node* p, vector<int> &a, int &n) const{
     if(p -> right != nullptr) treeTraversalRCL(p -> right, a, ++n);
     a.emplace_back(p -> getKey());
     if(p -> left != nullptr) treeTraversalRCL(p -> left, a, ++n);
- }
+}
 
- void BinTree::BFS(Node* p, vector<int> &a, int &n) const{
+void BinTree::BFS(Node* p, vector<int> &a, int &n) const{
     queue<Node*> q;
     q.push(p); ++n; // Добавляем вершину начала обхода
     while (!q.empty()){
@@ -115,8 +116,12 @@ void BinTree::add(int k, Node *p) {
         if(temp -> right != nullptr) {q.push(temp -> right); ++n;}
         a.emplace_back(temp -> getKey());
     }
- }
+}
 void BinTree::del(Node* p){
+    if(p == nullptr) return;
+
+    if(p == root) delRoot();
+
     if(p -> left == nullptr && p -> right == nullptr){
         Node* par = p -> parent;
         bool isLeft = false;
@@ -142,7 +147,10 @@ void BinTree::del(Node* p){
 }
 
 void BinTree::delRoot(){
+    if(root == nullptr) return;
+
     if(root -> left == nullptr && root -> right == nullptr){
+        delete root;
         root = nullptr;
         return;
     }
@@ -161,6 +169,8 @@ void BinTree::delRoot(){
 }
 
 void BinTree::clearTree() {
+    if(root == nullptr) return;
+
     while (root -> left !=  nullptr || root -> right != nullptr){
         if(root -> left != nullptr) del(root -> left);
         if(root -> right != nullptr) del(root -> right);
@@ -189,7 +199,7 @@ Node *BinTree::findKey(Node *p, int k) const {
 Node *BinTree::findMax(Node *p) const {
     Node* maxi = p;
 
-   auto cmp = [](Node* a, Node* b){
+    auto cmp = [](Node* a, Node* b){
         return a -> key < b -> key;
     };
 

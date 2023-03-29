@@ -5,7 +5,14 @@ int main()
     vector<int> t = {1,2,3,4,5};
     BinTree a(t, 5);
     cout << "Check print function:\n";
-    a.printTree(0, a.getRoot());
+    //a.printTree(0, a.getRoot());
+    //cout << "\n\n";
+
+    HANDLE hstOut = GetStdHandle(STD_OUTPUT_HANDLE);
+    CONSOLE_SCREEN_BUFFER_INFO csbi;
+    GetConsoleScreenBufferInfo(&hstOut, &csbi);
+    COORD cursor = csbi.dwCursorPosition;
+    a.printTreeVert(a.getRoot(), 0, 60,cursor.Y + 2); cout << "\n";
 
     cout << "\nCheck BFS:\n";
     vector<int> bfs; int n;
